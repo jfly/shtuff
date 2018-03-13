@@ -1,18 +1,3 @@
-# shtuff
+# shtuff  [![Build Status](https://travis-ci.org/jfly/shtuff.svg?branch=master)](https://travis-ci.org/jfly/shtuff)
 
 Shell stuffer
-
-## Setup
-
-```
-$ pip install twine
-```
-
-## Distributing
-
-TODO - put this on Travis
-
-```
-$ python setup.py sdist
-$ twine upload dist/*
-```
