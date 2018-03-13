@@ -3,4 +3,4 @@
 KEYS="$1"$'\n'
 shift
 
-exec spawn-and-stuff $SHELL "$KEYS" $@
+exec shtuff $SHELL "$KEYS" $@
