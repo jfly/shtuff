@@ -13,8 +13,7 @@ $ pip install -e .
 First, bump version number in `VERSION` file and commit. Then:
 
 ```bash
-$ git tag v$(cat VERSION)
-$ git push --tags
+$ git tag v$(cat VERSION) && git push --tags
 ```
 
 and wait for Travis to deploy to PyPi!
