@@ -10,10 +10,10 @@ $ pip install -e .
 
 ## Releasing
 
-Simply:
+First, bump version number in `VERSION` file and commit. Then:
 
 ```bash
-$ git tag vX.Y.Z
+$ git tag v$(cat VERSION)
 $ git push --tags
 ```
 

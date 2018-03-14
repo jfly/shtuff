@@ -14,7 +14,8 @@ import subprocess
 here = path.abspath(path.dirname(__file__))
 
 # Look at current git tag to get version.
-version = subprocess.check_output("git name-rev --tags --name-only $(git rev-parse HEAD)", shell=True).decode('utf-8').strip().lstrip("v")
+with open(path.join(here, 'VERSION'), encoding='utf-8') as version_file:
+    version = version_file.read().strip()
 
 # Get the long description from the README file
 with open(path.join(here, 'README.md'), encoding='utf-8') as f:
