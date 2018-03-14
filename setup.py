@@ -13,10 +13,6 @@ import subprocess
 
 here = path.abspath(path.dirname(__file__))
 
-# Look at current git tag to get version.
-with open(path.join(here, 'VERSION'), encoding='utf-8') as version_file:
-    version = version_file.read().strip()
-
 # Get the long description from the README file
 with open(path.join(here, 'README.md'), encoding='utf-8') as f:
     long_description = f.read()
@@ -37,14 +33,6 @@ setup(
     # specification here:
     # https://packaging.python.org/specifications/core-metadata/#name
     name='shtuff',  # Required
-
-    # Versions should comply with PEP 440:
-    # https://www.python.org/dev/peps/pep-0440/
-    #
-    # For a discussion on single-sourcing the version across setup.py and the
-    # project code, see
-    # https://packaging.python.org/en/latest/single_source_version.html
-    version=version,  # Required
 
     # This is a one-line description or tagline of what your project does. This
     # corresponds to the "Summary" metadata field:
@@ -132,6 +120,10 @@ setup(
         'dev': ['check-manifest'],
         'test': ['coverage'],
     },
+
+    # https://pypi.python.org/pypi/setuptools_scm
+    use_scm_version=True,
+    setup_requires=['setuptools_scm'],
 
     # To provide executable scripts, use entry points in preference to the
     # "scripts" keyword. Entry points provide cross-platform support and allow

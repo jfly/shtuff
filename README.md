@@ -10,10 +10,10 @@ $ pip install -e .
 
 ## Releasing
 
-First, bump version number in `VERSION` file and commit. Then:
+Simply:
 
 ```bash
-$ git tag v$(cat VERSION) && git push --tags
+$ git tag vX.Y.Z && git push --tags
 ```
 
 and wait for Travis to deploy to PyPi!
