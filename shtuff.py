@@ -11,11 +11,15 @@ import argparse
 import setproctitle
 
 CMD_FILE = os.path.expanduser("~/.config/spawn-and-stuff/{pid}.command".format(pid=os.getpid()))
+here = os.path.abspath(os.path.dirname(__file__))
+with open(os.path.join(here, 'VERSION'), encoding='utf-8') as version_file:
+    version = version_file.read().strip()
 
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('to_spawn', type=str, help='Command to spawn')
     parser.add_argument('to_stuff', type=str, nargs='?', default='', help='Keys to stuff')
+    parser.add_argument('-v', '--version', action='version', version=version)
     args = parser.parse_args()
     spawn_and_stuff(args.to_spawn, args.to_stuff)
 
