@@ -2,7 +2,13 @@
 
 Shell stuffer
 
-# Releasing
+## Development
+
+```bash
+$ pip install -e .
+```
+
+## Releasing
 
 Simply:
 
