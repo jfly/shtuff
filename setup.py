@@ -135,6 +135,7 @@ setup(
     entry_points={  # Optional
         'console_scripts': [
             'shtuff=shtuff:main',
+            'shtuffee=shtuff:shtuffee',
         ],
     },
 )
