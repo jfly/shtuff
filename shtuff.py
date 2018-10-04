@@ -12,7 +12,7 @@ import setproctitle
 
 from pkg_resources import get_distribution, DistributionNotFound
 
-CMD_FILE = os.path.expanduser("~/.config/spawn-and-stuff/{pid}.command".format(pid=os.getpid()))
+CMD_FILE = os.path.expanduser("~/.config/shtuff/{pid}.command".format(pid=os.getpid()))
 
 try:
     __version__ = get_distribution(__name__).version
@@ -29,7 +29,7 @@ def main():
     spawn_and_stuff(args.to_spawn, args.to_stuff)
 
 def spawn_and_stuff(to_spawn, to_stuff):
-    setproctitle.setproctitle("spawn-and-stuff")
+    setproctitle.setproctitle("shtuff")
 
     p = pexpect.spawn(to_spawn)
     def resize():
