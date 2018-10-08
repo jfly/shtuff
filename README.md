@@ -39,7 +39,7 @@ $ pip install -e .
 Simply:
 
 ```bash
-$ git tag vX.Y.Z && git push --follow-tags
+$ git tag vX.Y.Z && git push --tags
 ```
 
 and wait for Travis to deploy to PyPi!
