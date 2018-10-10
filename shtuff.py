@@ -10,13 +10,14 @@ import termios
 import argparse
 import subprocess
 import setproctitle
+import xdg.BaseDirectory
 
 from textwrap import dedent
 from pkg_resources import get_distribution, DistributionNotFound
 
-CONFIG_DIR = os.path.expanduser("~/.shtuff/")
-
-os.makedirs(CONFIG_DIR, exist_ok=True)
+def data_dir(file):
+    data_dir = xdg.BaseDirectory.save_data_path('shtuff')
+    return os.path.join(data_dir, file)
 
 try:
     __version__ = get_distribution(__name__).version
@@ -104,10 +105,10 @@ def shtuff_new(cmd, newline):
     spawn_and_stuff(os.environ['SHELL'], cmd)
 
 def get_pid_file(name):
-    return os.path.join(CONFIG_DIR, "{name}.pid".format(name=name))
+    return data_dir(f"{name}.pid")
 
 def get_cmd_file(pid):
-    return os.path.join(CONFIG_DIR, "{pid}.command".format(pid=pid))
+    return data_dir(f"{pid}.command")
 
 def find_nearest_shtuff_process():
     return subprocess.run(
@@ -137,7 +138,7 @@ def spawn_and_stuff(to_spawn, to_stuff):
             with open(cmd_file) as f:
                 p.send(f.read())
         except FileNotFoundError:
-            print("\nReceived SIGUSR1, tried to read commands from {}, but could not open the file.\n".format(CMD_FILE), file=sys.stderr)
+            print(f"\nReceived SIGUSR1, tried to read commands from {cmd_file}, but could not open the file.\n", file=sys.stderr)
     signal.signal(signal.SIGUSR1, lambda sig, data: read_and_stuff_command())
 
     p.send(to_stuff)
