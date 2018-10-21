@@ -60,3 +60,7 @@ class TestShtuff(unittest.TestCase):
 
         os.system("shtuff into receiverB 'echo bar'")
         receiverB.expect('bar')
+
+    def test_shtuff_without_args_shows_help(self):
+        child = pexpect.spawn("shtuff")
+        child.expect("usage")

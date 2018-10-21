@@ -73,6 +73,9 @@ def main():
 
 
     args = vars(parser.parse_args())
+    if not args:
+        return parser.print_help()
+
     func = args.pop('func')
     func(**args)
 
