@@ -3,6 +3,7 @@
 import os
 import sys
 import fcntl
+import psutil
 import signal
 import struct
 import pexpect
@@ -111,11 +112,17 @@ def get_cmd_file(pid):
     return data_dir(f"{pid}.command")
 
 def find_nearest_shtuff_process():
-    return subprocess.run(
-        """pstree -lps $$ | grep -Eo "shtuff\([0-9]+\)" | grep -Eo '[0-9]+'""",
-        shell=True,
-        capture_output=True,
-    ).stdout.decode().strip()
+    def ppid(process):
+        parent = process.parent()
+        if parent is None:
+            return
+
+        if parent.name() == 'shtuff':
+            return parent.pid
+
+        return ppid(parent)
+
+    return ppid(psutil.Process())
 
 def spawn_and_stuff(to_spawn, to_stuff):
     setproctitle.setproctitle("shtuff")
