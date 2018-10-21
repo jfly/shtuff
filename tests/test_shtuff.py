@@ -2,6 +2,7 @@ import os
 import shutil
 import pexpect
 import unittest
+import subprocess
 
 class TestShtuff(unittest.TestCase):
     @classmethod
@@ -64,3 +65,12 @@ class TestShtuff(unittest.TestCase):
     def test_shtuff_without_args_shows_help(self):
         child = pexpect.spawn("shtuff")
         child.expect("usage")
+
+    def test_shtuff_with_bad_target_gracefully_dies(self):
+        receiver = pexpect.spawn("shtuff as receiver")
+        receiver.expect('\$')
+        receiver.expect('\$')
+
+        out = subprocess.run("shtuff into badreceiver 'echo foo'", shell=True, capture_output=True, encoding='utf-8')
+        assert out.returncode == 1
+        assert 'not found' in out.stderr

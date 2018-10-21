@@ -94,6 +94,10 @@ def shtuff_into(name, cmd, newline):
         cmd += "\n"
 
     pid_file = get_pid_file(name)
+    if not os.path.exists(pid_file):
+        print(f"Shtuff target {name} was not found.", file=sys.stderr)
+        exit(1)
+
     with open(pid_file) as f:
         pid = int(f.read().strip())
 
