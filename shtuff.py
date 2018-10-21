@@ -122,7 +122,7 @@ def find_nearest_shtuff_process():
     def ppid(process):
         parent = process.parent()
         if parent is None:
-            return
+            return None
 
         if parent.name() == 'shtuff':
             return parent.pid
