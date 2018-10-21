@@ -30,9 +30,20 @@ running tail.
 
 ## Development
 
+Install your local copy:
+
 ```bash
 $ pip install -e .
 ```
+
+Run tests:
+
+```bash
+$ rm -rf tests/build && pip install -t tests/build .
+$ python -m unittest
+```
+
+If weird things happen, it might be worth running `find . -name __pycache__ | xargs rm -rf`
 
 ## Releasing
 
