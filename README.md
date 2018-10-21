@@ -33,14 +33,14 @@ running tail.
 Install your local copy:
 
 ```bash
-$ pip install -e .
+$ pip3 install -e .
 ```
 
 Run tests:
 
 ```bash
-$ rm -rf tests/build && pip install -t tests/build .
-$ python -m unittest
+$ rm -rf tests/build && pip3 install -t tests/build .
+$ python3 -m unittest
 ```
 
 ## Releasing
