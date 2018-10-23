@@ -9,8 +9,6 @@ class TestShtuff(unittest.TestCase):
     def setUpClass(cls):
         os.environ['HOME'] = os.path.join(os.environ['PWD'], 'tests/build/fake_home')
         os.environ['XDG_DATA_HOME'] = os.path.join(os.environ['HOME'], 'xdg_data_home/')
-        os.environ['PYTHONPATH'] = 'tests/build'
-        os.environ['PATH'] = './tests/build/bin/:' + os.environ['PATH']
         os.environ['SHELL'] = 'bash'
 
         os.makedirs(os.environ['HOME'], exist_ok=True)

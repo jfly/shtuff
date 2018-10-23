@@ -1,7 +1,9 @@
 language: python
 python:
   - '3.6'
-script: python setup.py sdist
+script:
+  - make test
+  - python setup.py sdist
 
 # https://docs.travis-ci.com/user/deployment/pypi/
 deploy:
