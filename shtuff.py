@@ -118,13 +118,20 @@ def get_pid_file(name):
 def get_cmd_file(pid):
     return data_dir(f"{pid}.command")
 
+def get_process_command(pid):
+    return subprocess.run(
+        f'ps -p {pid} -o command',
+        capture_output=True,
+        shell=True,
+    ).stdout.decode().split('\n')[-2].strip()
+
 def find_nearest_shtuff_process():
     def ppid(process):
         parent = process.parent()
-        if parent is None:
+        if parent is None or parent.pid == process.pid:
             return None
 
-        if parent.name() == 'shtuff':
+        if get_process_command(parent.pid) == 'shtuff':
             return parent.pid
 
         return ppid(parent)

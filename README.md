@@ -36,11 +36,24 @@ Install your local copy:
 $ pip3 install -e .
 ```
 
+Unless you know what you are doing, we highly recommend running tests inside a virtual environment.
+Here is how you can create and activate a virtual environment:
+
+```bash
+$ python3 -m venv .venv
+$ source .venv/bin/activate
+```
+
+You can leave the virtual environment via `deactivate`:
+
+```bash
+$ deactivate
+```
+
 Run tests:
 
 ```bash
-$ rm -rf tests/build && pip3 install -t tests/build .
-$ python3 -m unittest
+$ rm -rf tests/build && pip3 install -t tests/build . && python3 -m unittest
 ```
 
 ## Releasing
