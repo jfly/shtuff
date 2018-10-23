@@ -53,7 +53,7 @@ $ deactivate
 Run tests:
 
 ```bash
-$ rm -rf tests/build && pip3 install -t tests/build . && python3 -m unittest
+$ make test
 ```
 
 ## Releasing
