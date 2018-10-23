@@ -3,6 +3,7 @@
 import os
 import sys
 import fcntl
+import psutil
 import signal
 import struct
 import pexpect
@@ -10,13 +11,14 @@ import termios
 import argparse
 import subprocess
 import setproctitle
+import xdg.BaseDirectory
 
 from textwrap import dedent
 from pkg_resources import get_distribution, DistributionNotFound
 
-CONFIG_DIR = os.path.expanduser("~/.shtuff/")
-
-os.makedirs(CONFIG_DIR, exist_ok=True)
+def data_dir(file):
+    data_dir = xdg.BaseDirectory.save_data_path('shtuff')
+    return os.path.join(data_dir, file)
 
 try:
     __version__ = get_distribution(__name__).version
@@ -71,6 +73,9 @@ def main():
 
 
     args = vars(parser.parse_args())
+    if not args:
+        return parser.print_help()
+
     func = args.pop('func')
     func(**args)
 
@@ -89,6 +94,10 @@ def shtuff_into(name, cmd, newline):
         cmd += "\n"
 
     pid_file = get_pid_file(name)
+    if not os.path.exists(pid_file):
+        print(f"Shtuff target {name} was not found.", file=sys.stderr)
+        exit(1)
+
     with open(pid_file) as f:
         pid = int(f.read().strip())
 
@@ -104,17 +113,30 @@ def shtuff_new(cmd, newline):
     spawn_and_stuff(os.environ['SHELL'], cmd)
 
 def get_pid_file(name):
-    return os.path.join(CONFIG_DIR, "{name}.pid".format(name=name))
+    return data_dir(f"{name}.pid")
 
 def get_cmd_file(pid):
-    return os.path.join(CONFIG_DIR, "{pid}.command".format(pid=pid))
+    return data_dir(f"{pid}.command")
+
+def get_process_command(pid):
+    return subprocess.run(
+        f'ps -p {pid} -o command',
+        capture_output=True,
+        shell=True,
+    ).stdout.decode().split('\n')[-2].strip()
 
 def find_nearest_shtuff_process():
-    return subprocess.run(
-        """pstree -lps $$ | grep -Eo "shtuff\([0-9]+\)" | grep -Eo '[0-9]+'""",
-        shell=True,
-        capture_output=True,
-    ).stdout.decode().strip()
+    def ppid(process):
+        parent = process.parent()
+        if parent is None or parent.pid == process.pid:
+            return None
+
+        if get_process_command(parent.pid) == 'shtuff':
+            return parent.pid
+
+        return ppid(parent)
+
+    return ppid(psutil.Process())
 
 def spawn_and_stuff(to_spawn, to_stuff):
     setproctitle.setproctitle("shtuff")
@@ -137,7 +159,7 @@ def spawn_and_stuff(to_spawn, to_stuff):
             with open(cmd_file) as f:
                 p.send(f.read())
         except FileNotFoundError:
-            print("\nReceived SIGUSR1, tried to read commands from {}, but could not open the file.\n".format(CMD_FILE), file=sys.stderr)
+            print(f"\nReceived SIGUSR1, tried to read commands from {cmd_file}, but could not open the file.\n", file=sys.stderr)
     signal.signal(signal.SIGUSR1, lambda sig, data: read_and_stuff_command())
 
     p.send(to_stuff)
