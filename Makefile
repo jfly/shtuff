@@ -1,7 +1,13 @@
 .PHONY: test
-test: tests/build
+test: .shtuff-installed
 	python -m unittest
 
-tests/build: setup.py shtuff.py
+.PHONY: clean
+clean:
+	find . -name __pycache__ | xargs rm -rf
+	rm .shtuff-installed
+
+.shtuff-installed: setup.py shtuff.py
 	rm -rf tests/build
-	pip install -t tests/build .
+	pip install -e .
+	touch .shtuff-installed
