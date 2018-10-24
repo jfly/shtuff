@@ -128,12 +128,11 @@ def shtuff_has(name):
         print_target_not_found(name)
         exit(1)
 
-    if get_process_command(pid) == 'shtuff':
-        print(f"Shtuff process {name} was found with pid of {pid}.")
-    else:
+    if get_process_command(pid) != 'shtuff':
         print_target_not_found(name)
+        exit(1)
 
-    exit(1)
+    print(f"Shtuff process {name} was found with pid of {pid}.")
 
 def get_pid_file(name):
     return data_dir(f"{name}.pid")
