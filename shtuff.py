@@ -118,16 +118,25 @@ def shtuff_new(cmd, newline):
 
 def shtuff_has(name):
     pid_file = get_pid_file(name)
+    not_found = f"Stuff process {name} was not found."
 
     if not os.path.exists(pid_file):
-        print(f"not found", file=sys.stderr)
+        print(not_found, file=sys.stderr)
         exit(1)
 
     with open(pid_file) as f:
-        pid = int(f.read().strip())
+        pid_file_contents = f.read().strip()
+        if pid_file_contents == 'None':
+            print(not_found, file=sys.stderr)
+            exit(1)
+        pid = int(pid_file_contents)
 
-    print('command...')
-    print(get_process_command(pid))
+    if get_process_command(pid) == 'shtuff':
+        print(f"Shtuff process {name} was found with pid of {pid}.", file=sys.stderr)
+    else:
+        print(not_found, file=sys.stderr)
+
+    exit(1)
 
 def get_pid_file(name):
     return data_dir(f"{name}.pid")
