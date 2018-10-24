@@ -71,8 +71,8 @@ def main():
     add_newline_argument(parser_new)
     parser_new.set_defaults(func=shtuff_new)
 
-    parser_has = subparsers.add_parser('has', help='can haz cheezeburgerz?')
-    parser_has.add_argument('name', help='pls can haz cheezeburgerz?')
+    parser_has = subparsers.add_parser('has', help='check to see if target is available to receive commands')
+    parser_has.add_argument('name', help='the name of the shell to send the given command to')
     parser_has.set_defaults(func=shtuff_has)
 
     args = vars(parser.parse_args())
@@ -99,7 +99,7 @@ def shtuff_into(name, cmd, newline):
 
     pid_file = get_pid_file(name)
     if not os.path.exists(pid_file):
-        print(f"Shtuff target {name} was not found.", file=sys.stderr)
+        print_target_not_found(name)
         exit(1)
 
     pid = get_pid_from_file(pid_file)
@@ -117,22 +117,21 @@ def shtuff_new(cmd, newline):
 
 def shtuff_has(name):
     pid_file = get_pid_file(name)
-    not_found = f"Stuff process {name} was not found."
 
     if not os.path.exists(pid_file):
-        print(not_found, file=sys.stderr)
+        print_target_not_found(name)
         exit(1)
 
     try:
         pid = get_pid_from_file(pid_file)
     except ValueError:
-        print(not_found, file=sys.stderr)
+        print_target_not_found(name)
         exit(1)
 
     if get_process_command(pid) == 'shtuff':
-        print(f"Shtuff process {name} was found with pid of {pid}.", file=sys.stderr)
+        print(f"Shtuff process {name} was found with pid of {pid}.")
     else:
-        print(not_found, file=sys.stderr)
+        print_target_not_found(name)
 
     exit(1)
 
@@ -192,6 +191,9 @@ def spawn_and_stuff(to_spawn, to_stuff):
 
     p.send(to_stuff)
     p.interact()
+
+def print_target_not_found(name):
+    print(f"Shtuff target {name} was not found.", file=sys.stderr)
 
 if __name__ == "__main__":
     main()
