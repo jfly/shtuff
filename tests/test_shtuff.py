@@ -70,5 +70,19 @@ class TestShtuff(unittest.TestCase):
         receiver.expect('\$')
 
         out = subprocess.run("shtuff into badreceiver 'echo foo'", shell=True, capture_output=True, encoding='utf-8')
-        assert out.returncode == 1
-        assert 'not found' in out.stderr
+        self.assertEqual(out.returncode, 1)
+        self.assertIn('not found', out.stderr)
+
+    def test_shtuff_exit(self):
+        receiver = pexpect.spawn("shtuff as receiver")
+        receiver.expect('\$')
+        receiver.expect('\$')
+
+        out = subprocess.run("shtuff into receiver exit", shell=True, capture_output=True, encoding='utf-8')
+
+        # Now that the receiver has exited, try sending them a command. This
+        # won't actually *do* anything, but it shouldn't blow up. Later on, we
+        # may want to change shtuff into to be better about detecting dead
+        # receivers and spit out a nice error message.
+        out = subprocess.run("shtuff into receiver ls", shell=True, capture_output=True, encoding='utf-8')
+        self.assertEqual(out.returncode, 0)

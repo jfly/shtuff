@@ -85,6 +85,7 @@ def shtuff_as(name):
 
     if not pid:
         spawn_and_stuff(os.environ['SHELL'], f'shtuff as {name}\n')
+        return
 
     with open(pid_file, 'w') as f:
         f.write(str(pid))
