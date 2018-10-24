@@ -102,8 +102,7 @@ def shtuff_into(name, cmd, newline):
         print(f"Shtuff target {name} was not found.", file=sys.stderr)
         exit(1)
 
-    with open(pid_file) as f:
-        pid = int(f.read().strip())
+    pid = get_pid_from_file(pid_file)
 
     with open(get_cmd_file(pid), 'w') as f:
         f.write(cmd)
@@ -124,12 +123,11 @@ def shtuff_has(name):
         print(not_found, file=sys.stderr)
         exit(1)
 
-    with open(pid_file) as f:
-        pid_file_contents = f.read().strip()
-        if pid_file_contents == 'None':
-            print(not_found, file=sys.stderr)
-            exit(1)
-        pid = int(pid_file_contents)
+    try:
+        pid = get_pid_from_file(pid_file)
+    except ValueError:
+        print(not_found, file=sys.stderr)
+        exit(1)
 
     if get_process_command(pid) == 'shtuff':
         print(f"Shtuff process {name} was found with pid of {pid}.", file=sys.stderr)
@@ -140,6 +138,10 @@ def shtuff_has(name):
 
 def get_pid_file(name):
     return data_dir(f"{name}.pid")
+
+def get_pid_from_file(pid_file):
+    with open(pid_file) as f:
+        return int(f.read().strip())
 
 def get_cmd_file(pid):
     return data_dir(f"{pid}.command")
