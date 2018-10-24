@@ -71,6 +71,9 @@ def main():
     add_newline_argument(parser_new)
     parser_new.set_defaults(func=shtuff_new)
 
+    parser_has = subparsers.add_parser('has', help='can haz cheezeburgerz?')
+    parser_has.add_argument('name', help='pls can haz cheezeburgerz?')
+    parser_has.set_defaults(func=shtuff_has)
 
     args = vars(parser.parse_args())
     if not args:
@@ -112,6 +115,19 @@ def shtuff_new(cmd, newline):
         cmd += "\n"
 
     spawn_and_stuff(os.environ['SHELL'], cmd)
+
+def shtuff_has(name):
+    pid_file = get_pid_file(name)
+
+    if not os.path.exists(pid_file):
+        print(f"not found", file=sys.stderr)
+        exit(1)
+
+    with open(pid_file) as f:
+        pid = int(f.read().strip())
+
+    print('command...')
+    print(get_process_command(pid))
 
 def get_pid_file(name):
     return data_dir(f"{name}.pid")
