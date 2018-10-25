@@ -107,6 +107,10 @@ def shtuff_into(name, cmd, newline):
     with open(get_cmd_file(pid), 'w') as f:
         f.write(cmd)
 
+    if shtuff_process_has_terminated(pid):
+        print_target_not_found(name)
+        exit(1)
+
     os.kill(pid, signal.SIGUSR1)
 
 def shtuff_new(cmd, newline):
@@ -124,7 +128,7 @@ def shtuff_has(name):
 
     pid = get_pid_from_file(pid_file)
 
-    if get_process_command(pid) != 'shtuff':
+    if shtuff_process_has_terminated(pid):
         print_target_not_found(name)
         exit(1)
 
@@ -189,6 +193,9 @@ def spawn_and_stuff(to_spawn, to_stuff):
 
 def print_target_not_found(name):
     print(f"Shtuff target {name} was not found.", file=sys.stderr)
+
+def shtuff_process_has_terminated(pid):
+    return get_process_command(pid) != 'shtuff'
 
 if __name__ == "__main__":
     main()
