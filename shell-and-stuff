@@ -1,6 +1,0 @@
-#!/usr/bin/env bash
-
-KEYS="$1"$'\n'
-shift
-
-exec shtuff $SHELL "$KEYS" $@
