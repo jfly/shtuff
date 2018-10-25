@@ -93,12 +93,12 @@ class TestShtuff(unittest.TestCase):
         receiver.expect('\$')
 
         out = subprocess.run("shtuff has cheezeburgerz", shell=True, capture_output=True, encoding='utf-8')
-        assert 'was found' in out.stdout
+        self.assertIn('was found', out.stdout)
 
     def test_shtuff_does_not_have(self):
         out = subprocess.run("shtuff has cheezeburgerz", shell=True, capture_output=True, encoding='utf-8')
-        assert out.returncode == 1
-        assert 'not found' in out.stderr
+        self.assertEqual(out.returncode, 1)
+        self.assertIn('not found', out.stderr)
 
     def test_shtuff_does_not_have_after_exit(self):
         receiver = pexpect.spawn("shtuff as cheezeburgerz")
@@ -109,5 +109,5 @@ class TestShtuff(unittest.TestCase):
         receiver.expect('exit')
 
         out = subprocess.run("shtuff has cheezeburgerz", shell=True, capture_output=True, encoding='utf-8')
-        assert out.returncode == 1
-        assert 'not found' in out.stderr
+        self.assertEqual(out.returncode, 1)
+        self.assertIn('not found', out.stderr)
