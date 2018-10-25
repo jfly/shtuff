@@ -122,11 +122,7 @@ def shtuff_has(name):
         print_target_not_found(name)
         exit(1)
 
-    try:
-        pid = get_pid_from_file(pid_file)
-    except ValueError:
-        print_target_not_found(name)
-        exit(1)
+    pid = get_pid_from_file(pid_file)
 
     if get_process_command(pid) != 'shtuff':
         print_target_not_found(name)
