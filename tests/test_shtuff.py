@@ -78,11 +78,35 @@ class TestShtuff(unittest.TestCase):
         receiver.expect('\$')
         receiver.expect('\$')
 
-        out = subprocess.run("shtuff into receiver exit", shell=True, capture_output=True, encoding='utf-8')
+        os.system("shtuff into receiver exit")
+        receiver.expect('exit')
+        receiver.expect('exit')
 
-        # Now that the receiver has exited, try sending them a command. This
-        # won't actually *do* anything, but it shouldn't blow up. Later on, we
-        # may want to change shtuff into to be better about detecting dead
-        # receivers and spit out a nice error message.
         out = subprocess.run("shtuff into receiver ls", shell=True, capture_output=True, encoding='utf-8')
-        self.assertEqual(out.returncode, 0)
+        self.assertEqual(out.returncode, 1)
+        self.assertIn('not found', out.stderr)
+
+    def test_shtuff_has(self):
+        receiver = pexpect.spawn("shtuff as cheezeburgerz")
+        receiver.expect('\$')
+        receiver.expect('\$')
+
+        out = subprocess.run("shtuff has cheezeburgerz", shell=True, capture_output=True, encoding='utf-8')
+        self.assertIn('was found', out.stdout)
+
+    def test_shtuff_does_not_have(self):
+        out = subprocess.run("shtuff has cheezeburgerz", shell=True, capture_output=True, encoding='utf-8')
+        self.assertEqual(out.returncode, 1)
+        self.assertIn('not found', out.stderr)
+
+    def test_shtuff_does_not_have_after_exit(self):
+        receiver = pexpect.spawn("shtuff as cheezeburgerz")
+        receiver.expect('\$')
+        receiver.expect('\$')
+        os.system("shtuff into cheezeburgerz exit")
+        receiver.expect('exit')
+        receiver.expect('exit')
+
+        out = subprocess.run("shtuff has cheezeburgerz", shell=True, capture_output=True, encoding='utf-8')
+        self.assertEqual(out.returncode, 1)
+        self.assertIn('not found', out.stderr)
