@@ -9,20 +9,15 @@ clean:
 
 .PHONY: release-major
 release-major:
-	make release version=$$(./bump-version.py major)
+	./release.sh major
 
 .PHONY: release-minor
 release-minor:
-	make release version=$$(./bump-version.py minor)
+	./release.sh minor
 
 .PHONY: release-patch
 release-patch:
-	make release version=$$(./bump-version.py patch)
-
-.PHONY: release
-release:
-	git tag $(version)
-	git push --tags
+	./release.sh patch
 
 .shtuff-installed: setup.py shtuff.py
 	rm -rf tests/build
