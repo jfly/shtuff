@@ -58,10 +58,12 @@ $ make test
 
 ## Releasing
 
-Simply:
+We release using Makefile, choose the relevant target:
 
 ```bash
-$ git tag vX.Y.Z && git push --tags
+$ make release-major
+$ make release-minor
+$ make release-patch
 ```
 
-and wait for Travis to deploy to PyPi!
+and wait for Travis to deploy to [PyPi](https://pypi.org/project/shtuff/)!
