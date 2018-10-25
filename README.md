@@ -3,6 +3,18 @@
 Shell stuff will stuff commands into a shell à la `tmux send-keys` or `screen
 stuff`.
 
+## Installation
+
+If your environment is configured to use Python 3 by default:
+```
+$ pip install shtuff
+```
+
+Otherwise:
+```
+$ pip3 install shtuff
+```
+
 ## Examples
 In shell A, run:
 ```
