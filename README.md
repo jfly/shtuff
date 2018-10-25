@@ -1,4 +1,4 @@
-# shtuff  [![Build Status](https://travis-ci.org/jfly/shtuff.svg?branch=master)](https://travis-ci.org/jfly/shtuff)
+# shtuff  [![Build Status](https://travis-ci.org/jfly/shtuff.svg?branch=master)](https://travis-ci.org/jfly/shtuff) [![PyPI version](https://badge.fury.io/py/pypi.svg)](https://badge.fury.io/py/pypi)
 
 Shell stuff will stuff commands into a shell à la `tmux send-keys` or `screen
 stuff`.
