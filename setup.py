@@ -34,6 +34,8 @@ setup(
     # https://packaging.python.org/specifications/core-metadata/#name
     name='shtuff',  # Required
 
+    python_requires=">=3.7",
+
     # This is a one-line description or tagline of what your project does. This
     # corresponds to the "Summary" metadata field:
     # https://packaging.python.org/specifications/core-metadata/#summary
