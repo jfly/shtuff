@@ -15,6 +15,8 @@ Otherwise:
 $ pip3 install shtuff
 ```
 
+Please note: `shtuff` only works on Python 3.7+!
+
 ## Examples
 In shell A, run:
 ```
