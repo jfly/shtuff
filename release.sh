@@ -23,4 +23,6 @@ if [[ $? -gt 0 ]]; then
     exit 2
 fi
 
-echo "New version released: $NEW_VERSION"
+echo "New version released in GitHub: $NEW_VERSION"
+echo "Check the $NEW_VERSION branch in Travis CI: https://travis-ci.org/jfly/shtuff/branches"
+echo "If the build is successful, Travis CI will push the release to PyPI"
