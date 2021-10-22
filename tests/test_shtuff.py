@@ -11,7 +11,15 @@ class TestShtuff(unittest.TestCase):
         os.environ['XDG_DATA_HOME'] = os.path.join(os.environ['HOME'], 'xdg_data_home/')
         os.environ['SHELL'] = 'bash'
 
+        if os.path.exists(os.environ['HOME']):
+            shutil.rmtree(os.environ['HOME'])
+
         os.makedirs(os.environ['HOME'], exist_ok=True)
+
+        # Install shtuff (even though it's probably installed inside of the
+        # user's virtualenv, that's probably in their $HOME, we we clobbered
+        # above).
+        subprocess.check_call(["pip", "install", "-e", "."])
 
         bashrc = os.path.join(os.environ['HOME'], '.bashrc')
         with open(bashrc, 'w') as f:
