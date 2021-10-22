@@ -80,4 +80,4 @@ $ make release-minor
 $ make release-patch
 ```
 
-and wait for Travis to deploy to [PyPi](https://pypi.org/project/shtuff/)!
+and wait for the automated deploy to [PyPi](https://pypi.org/project/shtuff/)!

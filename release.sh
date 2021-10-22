@@ -24,5 +24,5 @@ if [[ $? -gt 0 ]]; then
 fi
 
 echo "New version released in GitHub: $NEW_VERSION"
-echo "Check the $NEW_VERSION branch in Travis CI: https://travis-ci.org/jfly/shtuff/branches"
-echo "If the build is successful, Travis CI will push the release to PyPI"
+echo "Check the $NEW_VERSION build: https://github.com/jfly/shtuff/actions/workflows/deploy.yml"
+echo "If the build is successful, the workflow will push the release to PyPI"
