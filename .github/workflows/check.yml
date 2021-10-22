@@ -1,0 +1,10 @@
+name: Check
+on: [pull_request, push]
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: python --version
+      - run: make test
+      - run: python setup.py sdist
