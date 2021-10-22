@@ -123,7 +123,9 @@ setup(
     },
 
     # https://pypi.python.org/pypi/setuptools_scm
-    use_scm_version=True,
+    use_scm_version={
+        "local_scheme": "no-local-version",
+    },
     setup_requires=['setuptools_scm'],
 
     # To provide executable scripts, use entry points in preference to the
