@@ -3,6 +3,7 @@
 import os
 import sys
 import fcntl
+import base64
 import psutil
 import signal
 import struct
@@ -135,7 +136,8 @@ def shtuff_has(name):
     print(f"Shtuff process {name} was found with pid of {pid}.")
 
 def get_pid_file(name):
-    return data_dir(f"{name}.pid")
+    safe_name = base64.urlsafe_b64encode(name.encode('utf8'))
+    return data_dir(f"{safe_name}.pid")
 
 def get_pid_from_file(pid_file):
     with open(pid_file) as f:
