@@ -123,6 +123,7 @@ setup(
 
     # https://pypi.python.org/pypi/setuptools_scm
     use_scm_version={
+        "version_scheme": "post-release",
         "local_scheme": "no-local-version",
     },
     setup_requires=['setuptools_scm'],
