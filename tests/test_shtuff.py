@@ -89,6 +89,7 @@ class TestShtuff(unittest.TestCase):
         os.system("shtuff into receiver exit")
         receiver.expect('exit')
         receiver.expect('exit')
+        receiver.wait()
 
         out = subprocess.run("shtuff into receiver ls", shell=True, capture_output=True, encoding='utf-8')
         self.assertEqual(out.returncode, 1)
@@ -114,6 +115,7 @@ class TestShtuff(unittest.TestCase):
         os.system("shtuff into cheezeburgerz exit")
         receiver.expect('exit')
         receiver.expect('exit')
+        receiver.wait()
 
         out = subprocess.run("shtuff has cheezeburgerz", shell=True, capture_output=True, encoding='utf-8')
         self.assertEqual(out.returncode, 1)
