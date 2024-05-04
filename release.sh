@@ -14,11 +14,17 @@ if ! git fetch upstream &>/dev/null; then
 	exit 2
 fi
 
-CURRENT_VERSION=$(git tag | sort -V | tail -n 1)
+
+CURRENT_VERSION=$(tr -d '\n' < VERSION)
 NEW_VERSION=$(./bump_version.py "$CURRENT_VERSION" "$RELEASE_LEVEL")
 
+echo "$NEW_VERSION" > VERSION
+git add VERSION
+git commit -m "Bumping version to $NEW_VERSION"
+
 git tag "$NEW_VERSION"
-git push --tags upstream
+git push upstream HEAD:main
+git push upstream "$NEW_VERSION"
 
 echo "New version released in GitHub: $NEW_VERSION"
 echo "Check the $NEW_VERSION build: https://github.com/jfly/shtuff/actions/workflows/deploy.yml"
