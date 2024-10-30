@@ -14,7 +14,8 @@
 # subprocess, but that feels like a weird thing to do.
 # TODO: seek help upstream with nix to see if there's a more appropriate
 # way of accomplishing all this.
-pyapp: pkgs.symlinkJoin {
+pyapp:
+pkgs.symlinkJoin {
   name = pyapp.name;
   paths = [ pyapp ];
   buildInputs = [ pkgs.makeWrapper ];

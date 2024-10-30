@@ -2,7 +2,6 @@ build/
 dist/
 *.egg-info/
 .eggs/
-.venv/
 __pycache__/
 tests/build/
 .shtuff-installed
