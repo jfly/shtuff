@@ -2,7 +2,7 @@ build/
 dist/
 *.egg-info/
 .eggs/
+.direnv/
 __pycache__/
 tests/build/
-.shtuff-installed
 result

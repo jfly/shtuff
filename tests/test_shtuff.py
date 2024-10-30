@@ -4,6 +4,8 @@ import pexpect
 import unittest
 import subprocess
 
+SHTUFF = 'python -c "import shtuff; shtuff.main()"'
+
 
 class TestShtuff(unittest.TestCase):
     @classmethod
@@ -17,11 +19,6 @@ class TestShtuff(unittest.TestCase):
 
         os.makedirs(os.environ["HOME"], exist_ok=True)
 
-        # Install shtuff (even though it's probably installed inside of the
-        # user's virtualenv, that's probably in their $HOME, we we clobbered
-        # above).
-        subprocess.check_call(["pip", "install", "-e", "."])
-
         bashrc = os.path.join(os.environ["HOME"], ".bashrc")
         with open(bashrc, "w") as f:
             f.write("PS1='$ '")
@@ -31,55 +28,55 @@ class TestShtuff(unittest.TestCase):
             shutil.rmtree(os.environ["XDG_DATA_HOME"])
 
     def test_shtuff_new(self):
-        child = pexpect.spawn("shtuff new 'echo foo\nexit'")
+        child = pexpect.spawn(f"{SHTUFF} new 'echo foo\nexit'")
         child.expect("foo")
 
     def test_shtuff_single_receiver(self):
-        receiver = pexpect.spawn("shtuff as receiver")
+        receiver = pexpect.spawn(f"{SHTUFF} as receiver")
         receiver.expect("\\$")
         receiver.expect("\\$")
 
-        os.system("shtuff into receiver 'echo foo'")
+        os.system(f"{SHTUFF} into receiver 'echo foo'")
         receiver.expect("foo")
 
     def test_shtuff_single_receiver_can_be_aliased(self):
-        receiver = pexpect.spawn("shtuff as receiver")
+        receiver = pexpect.spawn(f"{SHTUFF} as receiver")
         receiver.expect("\\$")
         receiver.expect("\\$")
 
-        os.system("shtuff into receiver 'shtuff as aliased'")
+        os.system(f"{SHTUFF} into receiver '{SHTUFF} as aliased'")
         receiver.expect("aliased")
         receiver.expect("\\$")
 
-        os.system("shtuff into aliased 'echo bar'")
+        os.system(f"{SHTUFF} into aliased 'echo bar'")
         receiver.expect("bar")
 
     def test_shtuff_multiple_receivers(self):
-        receiverA = pexpect.spawn("shtuff as receiverA")
+        receiverA = pexpect.spawn(f"{SHTUFF} as receiverA")
         receiverA.expect("\\$")
         receiverA.expect("\\$")
 
-        receiverB = pexpect.spawn("shtuff as receiverB")
+        receiverB = pexpect.spawn(f"{SHTUFF} as receiverB")
         receiverB.expect("\\$")
         receiverB.expect("\\$")
 
-        os.system("shtuff into receiverA 'echo foo'")
+        os.system(f"{SHTUFF} into receiverA 'echo foo'")
         receiverA.expect("foo")
 
-        os.system("shtuff into receiverB 'echo bar'")
+        os.system(f"{SHTUFF} into receiverB 'echo bar'")
         receiverB.expect("bar")
 
     def test_shtuff_without_args_shows_help(self):
-        child = pexpect.spawn("shtuff")
+        child = pexpect.spawn(SHTUFF)
         child.expect("usage")
 
     def test_shtuff_with_bad_target_gracefully_dies(self):
-        receiver = pexpect.spawn("shtuff as receiver")
+        receiver = pexpect.spawn(f"{SHTUFF} as receiver")
         receiver.expect("\\$")
         receiver.expect("\\$")
 
         out = subprocess.run(
-            "shtuff into badreceiver 'echo foo'",
+            f"{SHTUFF} into badreceiver 'echo foo'",
             shell=True,
             capture_output=True,
             encoding="utf-8",
@@ -88,28 +85,31 @@ class TestShtuff(unittest.TestCase):
         self.assertIn("not found", out.stderr)
 
     def test_shtuff_exit(self):
-        receiver = pexpect.spawn("shtuff as receiver")
+        receiver = pexpect.spawn(f"{SHTUFF} as receiver")
         receiver.expect("\\$")
         receiver.expect("\\$")
 
-        os.system("shtuff into receiver exit")
+        os.system(f"{SHTUFF} into receiver exit")
         receiver.expect("exit")
         receiver.expect("exit")
         receiver.wait()
 
         out = subprocess.run(
-            "shtuff into receiver ls", shell=True, capture_output=True, encoding="utf-8"
+            f"{SHTUFF} into receiver ls",
+            shell=True,
+            capture_output=True,
+            encoding="utf-8",
         )
         self.assertEqual(out.returncode, 1)
         self.assertIn("not found", out.stderr)
 
     def test_shtuff_has(self):
-        receiver = pexpect.spawn("shtuff as cheezeburgerz")
+        receiver = pexpect.spawn(f"{SHTUFF} as cheezeburgerz")
         receiver.expect("\\$")
         receiver.expect("\\$")
 
         out = subprocess.run(
-            "shtuff has cheezeburgerz",
+            f"{SHTUFF} has cheezeburgerz",
             shell=True,
             capture_output=True,
             encoding="utf-8",
@@ -118,7 +118,7 @@ class TestShtuff(unittest.TestCase):
 
     def test_shtuff_does_not_have(self):
         out = subprocess.run(
-            "shtuff has cheezeburgerz",
+            f"{SHTUFF} has cheezeburgerz",
             shell=True,
             capture_output=True,
             encoding="utf-8",
@@ -127,16 +127,16 @@ class TestShtuff(unittest.TestCase):
         self.assertIn("not found", out.stderr)
 
     def test_shtuff_does_not_have_after_exit(self):
-        receiver = pexpect.spawn("shtuff as cheezeburgerz")
+        receiver = pexpect.spawn(f"{SHTUFF} as cheezeburgerz")
         receiver.expect("\\$")
         receiver.expect("\\$")
-        os.system("shtuff into cheezeburgerz exit")
+        os.system(f"{SHTUFF} into cheezeburgerz exit")
         receiver.expect("exit")
         receiver.expect("exit")
         receiver.wait()
 
         out = subprocess.run(
-            "shtuff has cheezeburgerz",
+            f"{SHTUFF} has cheezeburgerz",
             shell=True,
             capture_output=True,
             encoding="utf-8",

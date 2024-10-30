@@ -44,24 +44,12 @@ running tail.
 
 ## Development
 
-Install your local copy:
+This repo defines a nix devShell. If you use direnv, it will automatically get
+loaded for you and you can skip to `Run Tests:`. If you do not use direnv, you
+will need to enter the shell with:
 
 ```bash
-$ pip3 install -e .
-```
-
-Unless you know what you are doing, we highly recommend running tests inside a virtual environment.
-Here is how you can create and activate a virtual environment:
-
-```bash
-$ python3 -m venv .venv
-$ source .venv/bin/activate
-```
-
-You can leave the virtual environment via `deactivate`:
-
-```bash
-$ deactivate
+$ nix develop
 ```
 
 Run tests:
