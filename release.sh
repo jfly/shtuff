@@ -5,20 +5,19 @@ set -euo pipefail
 RELEASE_LEVEL=$1
 
 if ! git remote -v | grep "^upstream.*github\.com.jfly\/shtuff\.git" &>/dev/null; then
-	echo "A remote named upstream must be configured to point to https://github.com/jfly/shtuff.git to be able to make a release"
-	exit 1
+  echo "A remote named upstream must be configured to point to https://github.com/jfly/shtuff.git to be able to make a release"
+  exit 1
 fi
 
 if ! git fetch upstream &>/dev/null; then
-	echo "Fetch did not perform successfully, make sure you have permission to pull from this repository."
-	exit 2
+  echo "Fetch did not perform successfully, make sure you have permission to pull from this repository."
+  exit 2
 fi
 
-
-CURRENT_VERSION=$(tr -d '\n' < VERSION)
+CURRENT_VERSION=$(tr -d '\n' <VERSION)
 NEW_VERSION=$(./bump_version.py "$CURRENT_VERSION" "$RELEASE_LEVEL")
 
-echo "$NEW_VERSION" > VERSION
+echo "$NEW_VERSION" >VERSION
 git add VERSION
 git commit -m "Bumping version to $NEW_VERSION"
 
