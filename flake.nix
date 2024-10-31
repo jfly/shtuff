@@ -25,5 +25,9 @@
       };
 
       packages.x86_64-linux.default = pkgs.callPackage ./nix { };
+
+      devShells.x86_64-linux.default = pkgs.mkShellNoCC {
+        inputsFrom = [ self.packages.x86_64-linux.default ];
+      };
     };
 }
