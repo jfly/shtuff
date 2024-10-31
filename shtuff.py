@@ -108,13 +108,17 @@ def main():
 
 
 def shtuff_as(name):
-    pid_file = get_pid_file(name)
     pid = find_nearest_shtuff_process()
 
     if not pid:
-        spawn_and_stuff(os.environ["SHELL"], f"shtuff as {name}\n")
+        spawn_and_stuff(os.environ["SHELL"], name=name)
         return
 
+    write_shtuff_pid(name, pid)
+
+
+def write_shtuff_pid(name, pid):
+    pid_file = get_pid_file(name)
     with open(pid_file, "w") as f:
         f.write(str(pid))
 
@@ -144,7 +148,7 @@ def shtuff_new(cmd, newline):
     if newline:
         cmd += "\n"
 
-    spawn_and_stuff(os.environ["SHELL"], cmd)
+    spawn_and_stuff(os.environ["SHELL"], to_stuff=cmd)
 
 
 def shtuff_has(name):
@@ -204,7 +208,7 @@ def find_nearest_shtuff_process():
     return ppid(psutil.Process())
 
 
-def spawn_and_stuff(to_spawn, to_stuff):
+def spawn_and_stuff(to_spawn, to_stuff=None, name=None):
     setproctitle.setproctitle("shtuff")
 
     p = pexpect.spawn(to_spawn)
@@ -221,8 +225,10 @@ def spawn_and_stuff(to_spawn, to_stuff):
     signal.signal(signal.SIGWINCH, lambda sig, data: resize())
     resize()
 
+    shtuff_pid = os.getpid()
+
     def read_and_stuff_command():
-        cmd_file = get_cmd_file(os.getpid())
+        cmd_file = get_cmd_file(shtuff_pid)
 
         try:
             with open(cmd_file) as f:
@@ -235,7 +241,12 @@ def spawn_and_stuff(to_spawn, to_stuff):
 
     signal.signal(signal.SIGUSR1, lambda sig, data: read_and_stuff_command())
 
-    p.send(to_stuff)
+    if to_stuff:
+        p.send(to_stuff)
+
+    if name:
+        write_shtuff_pid(name, shtuff_pid)
+
     p.interact()
 
 

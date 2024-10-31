@@ -34,36 +34,34 @@ class TestShtuff(unittest.TestCase):
     def test_shtuff_single_receiver(self):
         receiver = pexpect.spawn(f"{SHTUFF} as receiver")
         receiver.expect("\\$")
-        receiver.expect("\\$")
 
-        os.system(f"{SHTUFF} into receiver 'echo foo'")
+        subprocess.run(f"{SHTUFF} into receiver 'echo foo'", shell=True, check=True)
         receiver.expect("foo")
 
     def test_shtuff_single_receiver_can_be_aliased(self):
         receiver = pexpect.spawn(f"{SHTUFF} as receiver")
         receiver.expect("\\$")
-        receiver.expect("\\$")
 
-        os.system(f"{SHTUFF} into receiver '{SHTUFF} as aliased'")
+        subprocess.run(
+            f"{SHTUFF} into receiver '{SHTUFF} as aliased'", shell=True, check=True
+        )
         receiver.expect("aliased")
         receiver.expect("\\$")
 
-        os.system(f"{SHTUFF} into aliased 'echo bar'")
+        subprocess.run(f"{SHTUFF} into aliased 'echo bar'", shell=True, check=True)
         receiver.expect("bar")
 
     def test_shtuff_multiple_receivers(self):
         receiverA = pexpect.spawn(f"{SHTUFF} as receiverA")
         receiverA.expect("\\$")
-        receiverA.expect("\\$")
 
         receiverB = pexpect.spawn(f"{SHTUFF} as receiverB")
         receiverB.expect("\\$")
-        receiverB.expect("\\$")
 
-        os.system(f"{SHTUFF} into receiverA 'echo foo'")
+        subprocess.run(f"{SHTUFF} into receiverA 'echo foo'", shell=True, check=True)
         receiverA.expect("foo")
 
-        os.system(f"{SHTUFF} into receiverB 'echo bar'")
+        subprocess.run(f"{SHTUFF} into receiverB 'echo bar'", shell=True, check=True)
         receiverB.expect("bar")
 
     def test_shtuff_without_args_shows_help(self):
@@ -72,7 +70,6 @@ class TestShtuff(unittest.TestCase):
 
     def test_shtuff_with_bad_target_gracefully_dies(self):
         receiver = pexpect.spawn(f"{SHTUFF} as receiver")
-        receiver.expect("\\$")
         receiver.expect("\\$")
 
         out = subprocess.run(
@@ -87,9 +84,8 @@ class TestShtuff(unittest.TestCase):
     def test_shtuff_exit(self):
         receiver = pexpect.spawn(f"{SHTUFF} as receiver")
         receiver.expect("\\$")
-        receiver.expect("\\$")
 
-        os.system(f"{SHTUFF} into receiver exit")
+        subprocess.run(f"{SHTUFF} into receiver exit", shell=True, check=True)
         receiver.expect("exit")
         receiver.expect("exit")
         receiver.wait()
@@ -106,12 +102,11 @@ class TestShtuff(unittest.TestCase):
     def test_shtuff_has(self):
         receiver = pexpect.spawn(f"{SHTUFF} as cheezeburgerz")
         receiver.expect("\\$")
-        receiver.expect("\\$")
 
         out = subprocess.run(
             f"{SHTUFF} has cheezeburgerz",
             shell=True,
-            capture_output=True,
+            stdout=subprocess.PIPE,
             encoding="utf-8",
         )
         self.assertIn("was found", out.stdout)
@@ -129,8 +124,7 @@ class TestShtuff(unittest.TestCase):
     def test_shtuff_does_not_have_after_exit(self):
         receiver = pexpect.spawn(f"{SHTUFF} as cheezeburgerz")
         receiver.expect("\\$")
-        receiver.expect("\\$")
-        os.system(f"{SHTUFF} into cheezeburgerz exit")
+        subprocess.run(f"{SHTUFF} into cheezeburgerz exit", shell=True, check=True)
         receiver.expect("exit")
         receiver.expect("exit")
         receiver.wait()

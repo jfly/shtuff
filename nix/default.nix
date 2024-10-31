@@ -30,14 +30,6 @@ buildPythonApplication rec {
   nativeCheckInputs = [ pip ];
 
   checkPhase = ''
-    # venv uses ensurepip internally to install pip, which requires
-    # internet access, and fails in an isolated build environment.
-    # Instead, we hack together a pip that simply calls `python -m
-    # pip`. There must be a better way of doing this...
-    python -m venv venv --without-pip
-    cp ${pipwrap} venv/bin/pip
-    source venv/bin/activate
-
     make test
   '';
 
