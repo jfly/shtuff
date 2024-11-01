@@ -72,14 +72,14 @@ class TestShtuff(unittest.TestCase):
         receiver = pexpect.spawn(f"{SHTUFF} as receiver")
         receiver.expect("\\$")
 
-        out = subprocess.run(
+        cp = subprocess.run(
             f"{SHTUFF} into badreceiver 'echo foo'",
             shell=True,
             capture_output=True,
             encoding="utf-8",
         )
-        self.assertEqual(out.returncode, 1)
-        self.assertIn("not found", out.stderr)
+        self.assertEqual(cp.returncode, 1)
+        self.assertIn("not found", cp.stderr)
 
     def test_shtuff_exit(self):
         receiver = pexpect.spawn(f"{SHTUFF} as receiver")
@@ -90,36 +90,36 @@ class TestShtuff(unittest.TestCase):
         receiver.expect("exit")
         receiver.wait()
 
-        out = subprocess.run(
+        cp = subprocess.run(
             f"{SHTUFF} into receiver ls",
             shell=True,
             capture_output=True,
             encoding="utf-8",
         )
-        self.assertEqual(out.returncode, 1)
-        self.assertIn("not found", out.stderr)
+        self.assertEqual(cp.returncode, 1)
+        self.assertIn("not found", cp.stderr)
 
     def test_shtuff_has(self):
         receiver = pexpect.spawn(f"{SHTUFF} as cheezeburgerz")
         receiver.expect("\\$")
 
-        out = subprocess.run(
+        cp = subprocess.run(
             f"{SHTUFF} has cheezeburgerz",
             shell=True,
             stdout=subprocess.PIPE,
             encoding="utf-8",
         )
-        self.assertIn("was found", out.stdout)
+        self.assertIn("was found", cp.stdout)
 
     def test_shtuff_does_not_have(self):
-        out = subprocess.run(
+        cp = subprocess.run(
             f"{SHTUFF} has cheezeburgerz",
             shell=True,
             capture_output=True,
             encoding="utf-8",
         )
-        self.assertEqual(out.returncode, 1)
-        self.assertIn("not found", out.stderr)
+        self.assertEqual(cp.returncode, 1)
+        self.assertIn("not found", cp.stderr)
 
     def test_shtuff_does_not_have_after_exit(self):
         receiver = pexpect.spawn(f"{SHTUFF} as cheezeburgerz")
@@ -129,14 +129,14 @@ class TestShtuff(unittest.TestCase):
         receiver.expect("exit")
         receiver.wait()
 
-        out = subprocess.run(
+        cp = subprocess.run(
             f"{SHTUFF} has cheezeburgerz",
             shell=True,
             capture_output=True,
             encoding="utf-8",
         )
-        self.assertEqual(out.returncode, 1)
-        self.assertIn("not found", out.stderr)
+        self.assertEqual(cp.returncode, 1)
+        self.assertIn("not found", cp.stderr)
 
     def test_shtuff_can_show_receiver_name(self):
         receiver = pexpect.spawn(f"{SHTUFF} as receiver")
