@@ -160,3 +160,24 @@ class TestShtuff(unittest.TestCase):
             f"{SHTUFF} into receiver '{SHTUFF} whoami'", shell=True, check=True
         )
         receiver.expect("aliased\r\nreceiver")
+
+    def test_shtuff_whoami_fails_when_not_in_shtuff(self):
+        cp = subprocess.run(
+            f"{SHTUFF} whoami",
+            shell=True,
+            check=False,
+            stderr=subprocess.PIPE,
+            text=True,
+        )
+
+        self.assertEqual(cp.returncode, 1)
+        self.assertEqual(
+            "Error: this is not a shtuff shell. Use 'shtuff new' or 'shtuff as' to make one.\n",
+            cp.stderr,
+        )
+
+    def test_shtuff_whoami_prints_warning_when_has_no_name(self):
+        receiver = pexpect.spawn(f"{SHTUFF} new '{SHTUFF} whoami > /dev/null'")
+        receiver.expect(
+            "Warning: this shtuff has no name. Use 'shtuff as' to give it a name."
+        )
