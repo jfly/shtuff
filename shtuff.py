@@ -178,10 +178,25 @@ def shtuff_has(name):
 
 def shtuff_whoami():
     pid = find_nearest_shtuff_process()
+
+    if pid is None:
+        print(
+            "Error: this is not a shtuff shell. Use 'shtuff new' or 'shtuff as' to make one.",
+            file=sys.stderr,
+        )
+        sys.exit(1)
+
     pid_files = [x for x in os.listdir(data_dir()) if os.path.splitext(x)[1] == ".pid"]
     receivers = sorted(
         get_unsafe_name(x) for x in pid_files if get_pid_from_file(data_dir(x)) == pid
     )
+
+    if len(receivers) == 0:
+        print(
+            "Warning: this shtuff has no name. Use 'shtuff as' to give it a name.",
+            file=sys.stderr,
+        )
+        return
 
     print("\n".join(receivers))
 
