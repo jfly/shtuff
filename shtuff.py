@@ -18,8 +18,12 @@ from textwrap import dedent
 from pkg_resources import get_distribution, DistributionNotFound
 
 
-def data_dir(file):
+def data_dir(file=None):
     data_dir = xdg.BaseDirectory.save_data_path("shtuff")
+
+    if file is None:
+        return data_dir
+
     return os.path.join(data_dir, file)
 
 
@@ -99,6 +103,11 @@ def main():
     )
     parser_has.set_defaults(func=shtuff_has)
 
+    parser_whoami = subparsers.add_parser(
+        "whoami", help="print any found receiver names for the current shtuff shell"
+    )
+    parser_whoami.set_defaults(func=shtuff_whoami)
+
     args = vars(parser.parse_args())
     if not args:
         return parser.print_help()
@@ -167,8 +176,22 @@ def shtuff_has(name):
     print(f"Shtuff process {name} was found with pid of {pid}.")
 
 
+def shtuff_whoami():
+    pid = find_nearest_shtuff_process()
+    pid_files = [x for x in os.listdir(data_dir()) if os.path.splitext(x)[1] == ".pid"]
+    receivers = sorted(
+        get_unsafe_name(x) for x in pid_files if get_pid_from_file(data_dir(x)) == pid
+    )
+
+    print("\n".join(receivers))
+
+
+def get_unsafe_name(name):
+    return base64.urlsafe_b64decode(name.replace(".pid", "")).decode("utf8")
+
+
 def get_pid_file(name):
-    safe_name = base64.urlsafe_b64encode(name.encode("utf8"))
+    safe_name = base64.urlsafe_b64encode(name.encode("utf8")).decode("utf8")
     return data_dir(f"{safe_name}.pid")
 
 
