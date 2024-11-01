@@ -137,3 +137,26 @@ class TestShtuff(unittest.TestCase):
         )
         self.assertEqual(out.returncode, 1)
         self.assertIn("not found", out.stderr)
+
+    def test_shtuff_can_show_receiver_name(self):
+        receiver = pexpect.spawn(f"{SHTUFF} as receiver")
+        receiver.expect("\\$")
+
+        subprocess.run(
+            f"{SHTUFF} into receiver '{SHTUFF} whoami'", shell=True, check=True
+        )
+        receiver.expect("receiver")
+
+    def test_shtuff_can_show_all_receiver_names(self):
+        receiver = pexpect.spawn(f"{SHTUFF} as receiver")
+        receiver.expect("\\$")
+
+        subprocess.run(
+            f"{SHTUFF} into receiver '{SHTUFF} as aliased'", shell=True, check=True
+        )
+        receiver.expect("\\$")
+
+        subprocess.run(
+            f"{SHTUFF} into receiver '{SHTUFF} whoami'", shell=True, check=True
+        )
+        receiver.expect("aliased\r\nreceiver")
