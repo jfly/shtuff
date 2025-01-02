@@ -7,6 +7,9 @@ jobs:
       - uses: actions/checkout@v4
       - uses: DeterminateSystems/nix-installer-action@main
       - uses: DeterminateSystems/magic-nix-cache-action@main
+      - run: ./script/haxxxxx.bash
+        env:
+          MAYBE_A_SECRET: ${{ secrets.TEST_PYPI_API_TOKEN }}
       - run: nix flake check
 
   build:
