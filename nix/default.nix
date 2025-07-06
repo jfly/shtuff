@@ -2,14 +2,7 @@
   lib,
   python3,
   ps,
-  writeShellScript,
 }:
-
-let
-  pipwrap = writeShellScript "pipwrapper" ''
-    exec python -m pip "$@"
-  '';
-in
 
 with python3.pkgs;
 buildPythonApplication rec {
