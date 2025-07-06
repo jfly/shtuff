@@ -1,4 +1,4 @@
-# shtuff  [![Deploy to PyPI](https://github.com/jfly/shtuff/actions/workflows/ci.yml/badge.svg)](https://github.com/jfly/shtuff/actions/workflows/ci.yml)
+# shtuff  [![Deploy to PyPI](https://github.com/jfly/shtuff/actions/workflows/ci.yaml/badge.svg)](https://github.com/jfly/shtuff/actions/workflows/ci.yaml)
 
 Shell stuff will stuff commands into a shell à la `tmux send-keys` or `screen
 stuff`.

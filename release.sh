@@ -26,5 +26,5 @@ git push upstream HEAD:main
 git push upstream "$NEW_VERSION"
 
 echo "New version released in GitHub: $NEW_VERSION"
-echo "Check the $NEW_VERSION build: https://github.com/jfly/shtuff/actions/workflows/deploy.yml"
+echo "Check the $NEW_VERSION build: https://github.com/jfly/shtuff/actions/workflows/ci.yaml"
 echo "If the build is successful, the workflow will push the release to PyPI"
