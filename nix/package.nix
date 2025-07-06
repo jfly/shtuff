@@ -17,6 +17,11 @@ in
 buildPythonApplication {
   pname = "shtuff";
   inherit version;
+  pyproject = true;
+  build-system = [
+    setuptools
+    setuptools_scm
+  ];
 
   src = ../.;
 
@@ -25,8 +30,6 @@ buildPythonApplication {
     psutil
     pyxdg
     setproctitle
-    setuptools
-    setuptools_scm
   ];
 
   nativeCheckInputs = [ pip ];
