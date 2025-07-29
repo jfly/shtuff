@@ -15,7 +15,7 @@ import setproctitle
 import xdg.BaseDirectory
 
 from textwrap import dedent
-from pkg_resources import get_distribution, DistributionNotFound
+from importlib.metadata import version, PackageNotFoundError
 
 
 def data_dir(file=None):
@@ -28,8 +28,8 @@ def data_dir(file=None):
 
 
 try:
-    __version__ = get_distribution(__name__).version
-except DistributionNotFound:
+    __version__ = version(__name__)
+except PackageNotFoundError:
     # package is not installed
     __version__ = "development"
 
