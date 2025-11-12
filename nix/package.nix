@@ -8,7 +8,7 @@
   pyxdg,
   setproctitle,
   setuptools,
-  setuptools_scm,
+  setuptools-scm,
 }:
 
 let
@@ -20,7 +20,7 @@ buildPythonApplication {
   pyproject = true;
   build-system = [
     setuptools
-    setuptools_scm
+    setuptools-scm
   ];
 
   src = ../.;
